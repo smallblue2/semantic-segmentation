@@ -13,11 +13,11 @@ TIME = default_timer()
 # Get our model from pytorch hub
 match model_num:
     case 1:
-        model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet50', pretrained=True)
-    case 2:
-        model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet101', pretrained=True)
+        model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet50', pretrained=True) # 66.4 MIoU
+    case 2: 
+        model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_resnet101', pretrained=True)  # 67.4 MIoU
     case 3:
-        model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_mobilenet_v3_large', pretrained=True)
+        model = torch.hub.load('pytorch/vision:v0.10.0', 'deeplabv3_mobilenet_v3_large', pretrained=True) # 60.3 MIoU
 
 print(f'Retrieved model... ({default_timer() - TIME:.2f}s)')
 TIME = default_timer()
@@ -123,5 +123,39 @@ axs[0].set_title('Input Image')
 # Display output image on the right
 axs[1].imshow(r)
 axs[1].set_title('Output Segmentation')
+
+# Create our legend:
+# Create a legend for all classes
+import matplotlib.patches as mpatches
+
+# List our classes
+classes = [
+    "__background__",
+    "aeroplane (1)",
+    "bicycle (2)",
+    "bird (3)",
+    "boat (4)",
+    "bottle (5)",
+    "bus (6)",
+    "car (7)",
+    "cat (8)",
+    "chair (9)",
+    "cow (10)",
+    "diningtable (11)",
+    "dog (12)",
+    "horse (13)",
+    "motorbike (14)",
+    "person (15)",
+    "pottedplant (16)",
+    "sheep (17)",
+    "sofa (18)",
+    "train (19)",
+    "tvmonitor (20)",
+]
+
+# Create our handles
+handles = [mpatches.Patch(color=colors[i] / 255., label=classes[i]) for i in range(21)]
+axs[1].legend(handles=handles, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
 # Show the images
 plt.show()
